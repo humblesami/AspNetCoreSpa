@@ -46,18 +46,17 @@ namespace AspNetCoreSpa.Web
 
             services.AddPersistence(Configuration);
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                            .AddJwtBearer(options =>
-                            {
-                                // base-address of your identity server
-                                options.Authority = Configuration["Auth:Authority"];
-                                // name of the API resource
-                                options.TokenValidationParameters = new TokenValidationParameters
-                                {
-                                    ValidateIssuer = true,
-                                    ValidAudiences = Configuration.GetSection("Auth:Audiences").Get<List<string>>(),
-                                };
-                            });
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                // base-address of your identity server
+                options.Authority = Configuration["Auth:Authority"];
+                // name of the API resource
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidAudiences = Configuration.GetSection("Auth:Audiences").Get<List<string>>(),
+                };
+            });
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -97,16 +96,15 @@ namespace AspNetCoreSpa.Web
             });
 
             app.UseSpa(spa =>
-                      {
-                          spa.Options.SourcePath = "ClientApp";
-
-                          if (HostingEnvironment.IsDevelopment())
-                          {
-                              //spa.UseAngularCliServer(npmScript: "start");
-                              //   OR
-                              spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
-                          }
-                      });
+            {
+                spa.Options.SourcePath = "ClientApp";
+                if (HostingEnvironment.IsDevelopment())
+                {
+                    //spa.UseAngularCliServer(npmScript: "start");
+                    //   OR
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                }
+            });
         }
     }
 }
